@@ -1,4 +1,4 @@
-(in-package #:org.shirakumo.fraf.celeste)
+(in-package #:org.shirakumo.fraf.autosplitter)
 
 (defvar *area-names*
   #("Prologue"

@@ -1,6 +1,6 @@
-(defpackage #:org.shirakumo.fraf.celeste
+(defpackage #:org.shirakumo.fraf.autosplitter
   (:use #:cl)
-  (:nicknames #:celeste)
+  (:nicknames #:autosplitter)
   (:local-nicknames
    (#:trial #:org.shirakumo.fraf.trial)
    (#:alloy #:org.shirakumo.alloy)

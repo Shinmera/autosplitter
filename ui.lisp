@@ -1,4 +1,4 @@
-(in-package #:org.shirakumo.fraf.celeste)
+(in-package #:org.shirakumo.fraf.autosplitter)
 
 (defvar +main+ NIL)
 (defvar *last-check* 0)
@@ -7,7 +7,7 @@
               org.shirakumo.alloy:smooth-scaling-ui
               org.shirakumo.alloy.renderers.simple.presentations:default-look-and-feel)
   ((alloy:target-resolution :initform (alloy:px-size 300 500))
-   (alloy:base-scale :initform 1.0)))
+   (alloy:base-scale :initform 1.5)))
 
 (defmethod simple:request-font ((ui ui) (default (eql :default)) &key)
   (simple:request-font ui "NotoSansMono"))
@@ -37,7 +37,7 @@
 
 (presentations:define-update (ui total-timer)
   (timer
-   :size (alloy:un 50)
+   :size (alloy:un 40)
    :pattern (cond ((done *current-run*) colors:green)
                   ((started *current-run*) colors:white)
                   (T (colored:color 1 1 1 0.5)))))
@@ -89,15 +89,15 @@
     font))
 
 (defmethod initialize-instance :after ((pass ui-pass) &key)
-  (let ((layout (make-instance 'alloy:grid-layout :col-sizes '(T) :row-sizes '(60 T 60 100) :layout-parent (alloy:layout-tree pass)))
+  (let ((layout (make-instance 'alloy:grid-layout :col-sizes '(T) :row-sizes '(50 T 50 80) :layout-parent (alloy:layout-tree pass)))
         (focus (make-instance 'alloy:focus-list :focus-parent (alloy:focus-tree pass)))
         (run *current-run*))
-    (let ((stats (make-instance 'alloy:grid-layout :col-sizes '(T 60) :row-sizes '(30) :cell-margins (alloy:margins 2) :layout-parent layout)))
+    (let ((stats (make-instance 'alloy:grid-layout :col-sizes '(T 100) :row-sizes '(20) :cell-margins (alloy:margins) :layout-parent layout)))
       (alloy:enter "Best" stats)
       (alloy:represent (slot-value *best-run* 'total) 'timer :layout-parent stats)
       (alloy:enter "Previous" stats)
       (alloy:represent (slot-value *last-run* 'total) 'timer :layout-parent stats))
-    (let ((stages (make-instance 'alloy:grid-layout :col-sizes '(T 60 60) :row-sizes '(30) :cell-margins (alloy:margins 2) :layout-parent layout)))
+    (let ((stages (make-instance 'alloy:grid-layout :col-sizes '(T 60 60) :row-sizes '(20) :cell-margins (alloy:margins) :layout-parent layout)))
       (dotimes (i (length (areas run)))
         (let ((i i))
           (alloy:enter (aref *area-names* i) stages)
@@ -107,7 +107,7 @@
           (alloy:represent (lambda ((run (areas run)))
                              (aref run i))
                            'timer :layout-parent stages))))
-    (let ((stats (make-instance 'alloy:grid-layout :col-sizes '(T 60) :row-sizes '(30) :cell-margins (alloy:margins 2) :layout-parent layout)))
+    (let ((stats (make-instance 'alloy:grid-layout :col-sizes '(T 60) :row-sizes '(20) :cell-margins (alloy:margins) :layout-parent layout)))
       (alloy:enter "Deaths" stats)
       (alloy:represent (slot-value run 'deaths) 'alloy:label :layout-parent stats)
       (alloy:enter "Berries" stats)
@@ -130,6 +130,8 @@
       (let ((save (parse-save)))
         (unless (eql (getf save :started) (started run))
           (v:info :splits "Starting new run...")
+          (when (started run)
+            (update *last-run* run))
           (reset run)
           (setf last-time -1)
           (convert-to-run :run run :save save))
@@ -152,7 +154,8 @@
       (setf (areas run) (areas run)))))
 
 (defclass main (trial:main)
-  ())
+  ()
+  (:default-initargs :width 400 :height 600 :title "Autosplitter"))
 
 (defmethod initialize-instance :before ((main main) &key)
   (load-stats)

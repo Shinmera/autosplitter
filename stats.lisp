@@ -1,4 +1,4 @@
-(in-package #:org.shirakumo.fraf.celeste)
+(in-package #:org.shirakumo.fraf.autosplitter)
 
 (defvar *last-run* NIL)
 (defvar *best-run* NIL)
@@ -103,9 +103,9 @@
                     (update *ideal-run* (apply #'make-instance 'run ideal)))
                    (T
                     (when (< (start-time *last-run*) (getf last :start-time))
-                      (update *last-run* last))
+                      (update *last-run* (apply #'make-instance 'run last)))
                     (when (< (total *best-run*) (getf best :total))
-                      (update *best-run* best))
+                      (update *best-run* (apply #'make-instance 'best best)))
                     (update-ideal *ideal-run* (apply #'make-instance 'run ideal))))))
           (T
            (warn "Stats file does not exist!")))
@@ -119,7 +119,7 @@
                  :best (run-initargs *best-run*)
                  :ideal (run-initargs *ideal-run*))
            stream)))
-
+(save-stats)
 (setf *last-run* (make-instance 'run :run-no 0))
 (setf *best-run* (make-instance 'run :run-no 0))
 (setf *ideal-run* (make-instance 'run :run-no 0))
