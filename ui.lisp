@@ -57,6 +57,7 @@
 
 (presentations:define-update (ui diff)
   (timer
+   :text alloy:text
    :pattern (cond ((<= alloy:value -60) colors:transparent)
                   ((<= alloy:value   0) colors:green)
                   (T colors:red))))

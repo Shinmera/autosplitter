@@ -105,7 +105,7 @@
                     (when (< (start-time *last-run*) (getf last :start-time))
                       (update *last-run* (apply #'make-instance 'run last)))
                     (when (< (total *best-run*) (getf best :total))
-                      (update *best-run* (apply #'make-instance 'best best)))
+                      (update *best-run* (apply #'make-instance 'run best)))
                     (update-ideal *ideal-run* (apply #'make-instance 'run ideal))))))
           (T
            (warn "Stats file does not exist!")))
@@ -119,7 +119,7 @@
                  :best (run-initargs *best-run*)
                  :ideal (run-initargs *ideal-run*))
            stream)))
-(save-stats)
-(setf *last-run* (make-instance 'run :run-no 0))
+
+(setf *last-run* (make-instance 'run :run-no 0 :start-time 0))
 (setf *best-run* (make-instance 'run :run-no 0))
 (setf *ideal-run* (make-instance 'run :run-no 0))
