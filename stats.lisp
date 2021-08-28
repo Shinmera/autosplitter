@@ -87,7 +87,8 @@
           do (setf (aref (areas run) i) (better (aref (areas run) i) (aref (areas source) i))))))
 
 (defun update-best (run source)
-  (when (or (<= (total run) 0.0) (< (total run) (total source)))
+  (when (or (<= (total run) 0.0)
+            (< (total source) (total run)))
     (update run source)))
 
 (defun load-stats (&key (file #p "~/.config/celeste-splits/any.lisp") replace)
