@@ -10,6 +10,7 @@
    (#:opengl #:org.shirakumo.alloy.renderers.opengl)
    (#:colored #:org.shirakumo.alloy.colored)
    (#:colors #:org.shirakumo.alloy.colored.colors)
-   (#:animation #:org.shirakumo.alloy.animation))
+   (#:animation #:org.shirakumo.alloy.animation)
+   (#:v #:org.shirakumo.verbose))
   (:export
    #:launch))
